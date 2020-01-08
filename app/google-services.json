@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "364632392978",
+    "firebase_url": "https://pavs-d59ce.firebaseio.com",
+    "project_id": "pavs-d59ce",
+    "storage_bucket": "pavs-d59ce.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:364632392978:android:6776dd7a71914a6856dfcb",
+        "android_client_info": {
+          "package_name": "com.nenecorp.pavsstudent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "364632392978-85bt2n8sq27hkn1gm92f7r6v9m1limci.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nenecorp.pavsstudent",
+            "certificate_hash": "d80f865b9ef12d914dbd2bdd3b18e40097e8218d"
+          }
+        },
+        {
+          "client_id": "364632392978-pitfhr0eq4cdn4hbgavi97ame6jhcb04.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_VBo_FmIUlIadwhSVp54m1cCgs4d-b1Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "364632392978-pitfhr0eq4cdn4hbgavi97ame6jhcb04.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
