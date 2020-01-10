@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".Interface.StudentUi.StudentInfo">
+    tools:context=".Interface.StudentUi.Project.ProjectSelection">
 
     <TextView
         android:layout_width="wrap_content"
@@ -27,7 +26,7 @@
         android:gravity="center"
         android:orientation="vertical">
 
-        <androidx.cardview.widget.CardView
+        <RelativeLayout
             android:id="@+id/APT_btnGroupProject"
             android:layout_width="match_parent"
             android:layout_height="70dp"
@@ -35,12 +34,11 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="#FFF"
+            android:background="@drawable/btn_school"
+            android:backgroundTint="@color/theme_color"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="@drawable/clk_btn_theme"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp">
+            android:foreground="@drawable/clk_btn">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -56,7 +54,8 @@
                     <LinearLayout
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_margin="5dp">
+                        android:layout_margin="5dp"
+                        android:background="@drawable/cir_white">
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -79,15 +78,16 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="5dp"
-                        android:fontFamily="@font/light"
+                        android:fontFamily="@font/regular"
                         android:text="Team Project"
-                        android:textColor="@android:color/black"
+                        android:textColor="@android:color/white"
                         android:textSize="20dp" />
                 </LinearLayout>
             </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+        </RelativeLayout>
 
-        <androidx.cardview.widget.CardView
+
+        <RelativeLayout
             android:id="@+id/APT_btnSoloProject"
             android:layout_width="match_parent"
             android:layout_height="70dp"
@@ -95,12 +95,10 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:backgroundTint="#FFF"
+            android:background="@drawable/btn_school"
             android:clickable="true"
             android:focusable="true"
-            android:foreground="@drawable/clk_btn_theme"
-            app:cardCornerRadius="10dp"
-            app:cardElevation="5dp">
+            android:foreground="@drawable/clk_btn">
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -116,7 +114,8 @@
                     <LinearLayout
                         android:layout_width="50dp"
                         android:layout_height="50dp"
-                        android:layout_margin="5dp">
+                        android:layout_margin="5dp"
+                        android:background="@drawable/cir_white">
 
                         <ImageView
                             android:layout_width="match_parent"
@@ -139,13 +138,13 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginStart="5dp"
-                        android:fontFamily="@font/light"
+                        android:fontFamily="@font/regular"
                         android:text="Solo Project"
-                        android:textColor="@android:color/black"
+                        android:textColor="@android:color/white"
                         android:textSize="20dp" />
                 </LinearLayout>
             </RelativeLayout>
-        </androidx.cardview.widget.CardView>
+        </RelativeLayout>
     </LinearLayout>
 
     <LinearLayout

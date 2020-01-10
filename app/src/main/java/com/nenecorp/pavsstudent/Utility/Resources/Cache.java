@@ -1,6 +1,4 @@
 package com.nenecorp.pavsstudent.Utility.Resources;
-
-import com.nenecorp.pavsstudent.DataModel.PavsDatabase;
 import com.nenecorp.pavsstudent.Interface.StudentUi.Home;
 
 public class Cache {
@@ -12,9 +10,6 @@ public class Cache {
 
 
     public static void setHome(Home home) {
-        if (home == null){
-            PavsDatabase.closeBroadcast();
-        }
         Cache.home = home;
     }
 }

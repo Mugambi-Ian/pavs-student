@@ -3,8 +3,6 @@ package com.nenecorp.pavsstudent.Interface.StudentUi;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.transition.Fade;
-import android.transition.TransitionInflater;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
@@ -16,8 +14,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
-import com.nenecorp.pavsstudent.DataModel.PavsDatabase;
 import com.nenecorp.pavsstudent.DataModel.Pavs.Student;
+import com.nenecorp.pavsstudent.DataModel.PavsDB;
+import com.nenecorp.pavsstudent.DataModel.PavsDBController;
 import com.nenecorp.pavsstudent.Interface.StudentUi.Project.ProjectSelection;
 import com.nenecorp.pavsstudent.R;
 import com.nenecorp.pavsstudent.Utility.Resources.Animator;
@@ -25,39 +24,42 @@ import com.nenecorp.pavsstudent.Utility.Resources.Cache;
 
 import java.util.ArrayList;
 
-public class StudentInfo extends AppCompatActivity {
+public class StudentDetails extends AppCompatActivity {
     private TextInputEditText editTextAdmNo, editTextName, editTextPhoneNumber;
     private View btnCancel;
     private ArrayList<InputField> inputFields;
+    private PavsDB pavsDB;
 
     @Override
-    public void finish() {
-        if (Cache.home == null) {
-            overridePendingTransition(0,0);
-            startActivity(new Intent(this, ProjectSelection.class));
-        }
-        overridePendingTransition(0,0);
-        super.finish();
+    public void onBackPressed() {
+        finish();
     }
 
-    public void hideKeyboard() {
-        Activity activity = this;
-        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
-        View view = activity.getCurrentFocus();
-        if (view == null) {
-            view = new View(activity);
-        }
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-    }
-    private void setupWindowAnimations() {
-        Fade fade = (Fade) TransitionInflater.from(this).inflateTransition(R.transition.activity_fade);
-        getWindow().setEnterTransition(fade);
-    }
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_user_registration);
-setupWindowAnimations();
+    protected void onRestart() {
+        super.onRestart();
+        initialize();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initialize();
+    }
+
+    private void initialize() {
+        if (PavsDBController.isLoaded()) {
+            pavsDB = PavsDBController.getDatabase();
+            loadContent();
+        } else {
+            new PavsDBController(database -> {
+                pavsDB = database;
+                loadContent();
+            });
+        }
+    }
+
+    private void loadContent() {
         inputFields = new ArrayList<>();
         btnCancel = findViewById(R.id.AUR_btnCancel);
         View btnSave = findViewById(R.id.AUR_btnSave);
@@ -82,51 +84,52 @@ setupWindowAnimations();
                 return true;
             }
         });
-        editTextName.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_NEXT) {
-                    editTextPhoneNumber.requestFocus();
-                }
-                return true;
+        editTextName.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_NEXT) {
+                editTextPhoneNumber.requestFocus();
             }
+            return true;
         });
-        editTextPhoneNumber.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    hideKeyboard();
-                }
-                return true;
+        editTextPhoneNumber.setOnEditorActionListener((v, actionId, event) -> {
+            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                hideKeyboard();
             }
+            return true;
         });
-        if (PavsDatabase.getAppUser() == null) {
+        if (pavsDB.getAppUser() == null) {
             newUser();
         } else {
             loadUser();
         }
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Animator.OnClick(v, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        saveUserInfo();
-                    }
-                });
-            }
-        });
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Animator.OnClick(v, new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        finish();
-                    }
-                });
-            }
-        });
+        btnSave.setOnClickListener(v -> Animator.OnClick(v, v1 -> saveUserInfo()));
+        btnCancel.setOnClickListener(v -> Animator.OnClick(v, v12 -> finish()));
+    }
+
+    @Override
+    public void finish() {
+        if (Cache.getHome() == null) {
+            overridePendingTransition(0, 0);
+            startActivity(new Intent(this, ProjectSelection.class));
+        }
+        overridePendingTransition(0, 0);
+        super.finish();
+    }
+
+    public void hideKeyboard() {
+        Activity activity = this;
+        InputMethodManager imm = (InputMethodManager) activity.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        View view = activity.getCurrentFocus();
+        if (view == null) {
+            view = new View(activity);
+        }
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_student_details);
+        initialize();
     }
 
     private void saveUserInfo() {
@@ -139,7 +142,7 @@ setupWindowAnimations();
             student.setAdmissionNumber(admNo)
                     .setPhoneNumber(phoneNumber)
                     .setUserName(name);
-            PavsDatabase.saveUser(student);
+            pavsDB.saveUser(student);
             finish();
         }
     }
@@ -156,9 +159,9 @@ setupWindowAnimations();
 
     private void loadUser() {
         editTextAdmNo.setEnabled(false);
-        editTextAdmNo.setText(PavsDatabase.getAppUser().getAdmissionNumber());
-        editTextName.setText(PavsDatabase.getAppUser().getUserName());
-        editTextPhoneNumber.setText(PavsDatabase.getAppUser().getPhoneNumber());
+        editTextAdmNo.setText(pavsDB.getAppUser().getAdmissionNumber());
+        editTextName.setText(pavsDB.getAppUser().getUserName());
+        editTextPhoneNumber.setText(pavsDB.getAppUser().getPhoneNumber());
     }
 
     private void newUser() {

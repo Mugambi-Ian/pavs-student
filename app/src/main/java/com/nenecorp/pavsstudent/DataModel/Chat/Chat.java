@@ -18,7 +18,8 @@ public class Chat {
         if (chatMessages == null) {
             chatMessages = new ArrayList<>();
         }
-        chatMessages.add(message);
-
+        if (message != null) {
+            chatMessages.add(message);
+        }
     }
 }

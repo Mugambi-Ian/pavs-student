@@ -7,7 +7,6 @@ public class Student {
     private String phoneNumber;
     private String projectType;
     private String projectId;
-
     private String teamRequest;
 
     public String getTeamRequest() {

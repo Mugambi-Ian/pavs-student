@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".Interface.StudentUi.StudentInfo">
+    tools:context=".Interface.StudentUi.Project.ProjectDetails">
 
     <TextView
         android:layout_width="wrap_content"
@@ -12,7 +12,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
         android:fontFamily="@font/regular"
-        android:text="My Info"
+        android:text="Project Details"
         android:textColor="@android:color/black"
         android:textSize="22dp" />
 
@@ -26,20 +26,48 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/light"
+                android:text="Project Id:"
+                android:textColor="@android:color/black"
+                android:textSize="20dp" />
+
+            <TextView
+                android:id="@+id/API_txtProjectId"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="20dp"
+                android:fontFamily="@font/light"
+                android:text="2017-gp102"
+                android:textColor="@android:color/darker_gray"
+                android:textSize="20dp" />
+        </LinearLayout>
+
+
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/AUR_tlAdmNo"
+            android:id="@+id/API_tlProjectName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:hint="Admission Number">
+            android:hint="Project Name">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/AUR_edAdmNo"
+                android:id="@+id/API_edProjectName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/light"
-                android:hint="Admission Number"
-                android:imeActionLabel="actionNext"
+                android:hint="Project Name"
                 android:inputType="text"
                 android:maxLines="1"
                 android:paddingStart="10dp"
@@ -51,45 +79,20 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/AUR_tlName"
+            android:id="@+id/API_tlDescription"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:hint="Students Name">
+            android:hint="Project Description">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/AUR_edName"
+                android:id="@+id/API_edDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/light"
-                android:hint="Students Name"
-                android:imeActionLabel="actionNext"
+                android:hint="Project Description"
                 android:inputType="text"
-                android:maxLines="1"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp"
-                android:textColor="@android:color/black"
-                android:textColorHint="@android:color/darker_gray"
-                android:textSize="20dp" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/AUR_tlPhoneNumber"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:hint="Phone Number">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/AUR_edPhoneNumber"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/light"
-                android:hint="Phone Number"
-                android:imeActionLabel="actionDone"
-                android:inputType="phone"
-                android:maxLines="1"
+                android:maxLines="5"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:textColor="@android:color/black"
@@ -105,7 +108,7 @@
             android:orientation="horizontal">
 
             <RelativeLayout
-                android:id="@+id/AUR_btnCancel"
+                android:id="@+id/API_btnCancel"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="10dp"
@@ -159,7 +162,7 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/AUR_btnSave"
+                android:id="@+id/API_btnSubmit"
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
                 android:layout_marginStart="5dp"
@@ -205,7 +208,7 @@
                         android:layout_gravity="center"
                         android:layout_marginStart="5dp"
                         android:fontFamily="@font/bold_semi"
-                        android:text="Save"
+                        android:text="Submit"
                         android:textColor="@android:color/white"
                         android:textSize="18dp" />
                 </LinearLayout>

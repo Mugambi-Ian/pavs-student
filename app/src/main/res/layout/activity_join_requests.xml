@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".Interface.StartUp.SplashScreen">
+    tools:context=".Interface.StudentUi.Team.JoinRequests">
 
     <ImageView
         android:layout_width="200dp"
@@ -63,7 +63,7 @@
                             android:fontFamily="@font/light"
                             android:text="Students Name"
                             android:textColor="@android:color/black"
-                            android:textSize="18dp" />
+                            android:textSize="20dp" />
 
                         <TextView
                             android:id="@+id/AJR_txtStudentName"
@@ -72,7 +72,7 @@
                             android:fontFamily="@font/light"
                             android:text="Muriithi Mugambi Ian"
                             android:textColor="@android:color/darker_gray"
-                            android:textSize="18dp" />
+                            android:textSize="20dp" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -87,7 +87,7 @@
                             android:fontFamily="@font/light"
                             android:text="Admission Number"
                             android:textColor="@android:color/black"
-                            android:textSize="18dp" />
+                            android:textSize="20dp" />
 
                         <TextView
                             android:id="@+id/AJR_txtAdmNo"
@@ -96,7 +96,7 @@
                             android:fontFamily="@font/light"
                             android:text="Cs/Mg/1841/09/17"
                             android:textColor="@android:color/darker_gray"
-                            android:textSize="18dp" />
+                            android:textSize="20dp" />
                     </LinearLayout>
                 </LinearLayout>
 
@@ -155,7 +155,7 @@
                                 android:fontFamily="@font/bold_semi"
                                 android:text="Reject"
                                 android:textColor="@android:color/white"
-                                android:textSize="18dp" />
+                                android:textSize="20dp" />
                         </LinearLayout>
 
                     </RelativeLayout>
@@ -209,7 +209,7 @@
                                 android:fontFamily="@font/bold_semi"
                                 android:text="Approve"
                                 android:textColor="@android:color/white"
-                                android:textSize="18dp" />
+                                android:textSize="20dp" />
                         </LinearLayout>
 
                     </RelativeLayout>

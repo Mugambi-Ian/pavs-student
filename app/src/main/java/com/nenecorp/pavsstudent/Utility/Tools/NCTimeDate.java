@@ -1,4 +1,4 @@
-package com.nenecorp.pavsstudent.Utility.Resources;
+package com.nenecorp.pavsstudent.Utility.Tools;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;

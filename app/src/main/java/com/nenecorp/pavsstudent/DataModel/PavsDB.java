@@ -1,15 +1,13 @@
 package com.nenecorp.pavsstudent.DataModel;
 
-import android.util.Log;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.common.collect.ImmutableMap;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,105 +22,146 @@ import com.nenecorp.pavsstudent.DataModel.Pavs.Project;
 import com.nenecorp.pavsstudent.DataModel.Pavs.Student;
 import com.nenecorp.pavsstudent.Utility.Resources.Cache;
 import com.nenecorp.pavsstudent.Utility.Resources.Dictionary;
-import com.nenecorp.pavsstudent.Utility.Resources.NCJson;
-import com.nenecorp.pavsstudent.Utility.Resources.NCTimeDate;
-import com.nenecorp.pavsstudent.Utility.Tools.PresenceManager.PresencePnCallback;
-import com.nenecorp.pavsstudent.Utility.Tools.PresenceManager.PresenceRecord;
-import com.pubnub.api.PNConfiguration;
-import com.pubnub.api.PubNub;
-import com.pubnub.api.callbacks.PNCallback;
-import com.pubnub.api.models.consumer.PNPublishResult;
-import com.pubnub.api.models.consumer.PNStatus;
-import com.pubnub.api.models.consumer.presence.PNHereNowResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
-public class PavsDatabase {
-    private static Chat teamChat;
-    private static Student appUser;
-    private static Project studentProject;
-    private static PubNub mPubNubDataStream;
-    private static DataSnapshot pavsDatabase;
-    private static ArrayList<IdString> requestIds;
-    private static ArrayList<IdString> memberIds;
-    private static ArrayList<Student> joinRequests;
-    private static ArrayList<Student> teamMembers;
-    private static ArrayList<String> subscribedChannels;
-    private static PresencePnCallback mPresencePnCallback;
-    private static ArrayList<PresenceRecord> presenceRecords;
-    private static ArrayList<DataListener> dataListeners;
-    private static final String TAG = "PAVSDatabase";
+public class PavsDB {
+    public Chat teamChat;
+    private Student appUser;
+    private Project studentProject;
+    private DataSnapshot pavsDatabase;
+    private ArrayList<IdString> requestIds;
+    private ArrayList<IdString> memberIds;
+    private ArrayList<Student> joinRequests;
+    private ArrayList<Student> teamMembers;
+    private ArrayList<DataListener> dataListeners;
 
-    public PavsDatabase() {
+    public interface DatabaseInterface {
+        void onLoaded(PavsDB pavsDB);
+    }
+
+    public PavsDB(DatabaseInterface databaseInterface) {
+        init();
+        final Handler handler = new Handler();
+        final int delay = 5;
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if (isLoaded()) {
+                    databaseInterface.onLoaded(PavsDB.this);
+                } else {
+                    handler.postDelayed(this, delay);
+                }
+            }
+        }, delay);
+    }
+
+    private void init() {
         dataListeners = new ArrayList<>();
-        FirebaseDatabase.getInstance().getReference().addValueEventListener(new ValueEventListener() {
+        teamChat = new Chat(new ArrayList<>());
+        ValueEventListener eventListener = new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 pavsDatabase = dataSnapshot;
                 appUser = null;
                 studentProject = null;
                 getAppUser();
+                if (teamChat != null) {
+                    for (DataListener listener : dataListeners) {
+                        listener.newMessage();
+                    }
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
 
             }
-        });
+        };
+        FirebaseDatabase.getInstance().getReference().addValueEventListener(eventListener);
     }
 
-    public static void rejectGroupJoin(Student reqStudent) {
+    public void rejectJoinRequest(Student reqStudent) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Dictionary.STUDENT_RECORDS).child(reqStudent.getStudentsId());
         reference.child(Dictionary.projectId).setValue(null);
-        reference.child(Dictionary.teamRequest).setValue(Dictionary.GROUP_DENIED);
+        reference.child(Dictionary.teamRequest).setValue(Dictionary.TEAM_DENIED);
         DatabaseReference p = FirebaseDatabase.getInstance().getReference().child(Dictionary.TEAM_PROJECT);
         p = p.child(getProjectYear(reqStudent.getProjectId()));
         p = p.child(reqStudent.getProjectId());
-        p = p.child(Dictionary.joinRequests).child(getRequestId(reqStudent.getStudentsId()));
+        p = p.child(Dictionary.joinRequests).child(reqStudent.getStudentsId());
         p.setValue(null);
     }
 
 
-    public static void addDataListener(DataListener dataListener) {
+    public void addDataListener(DataListener dataListener) {
         dataListeners.add(dataListener);
     }
 
+    public void approveJoinRequest(Student reqStudent) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference().child(Dictionary.STUDENT_RECORDS).child(reqStudent.getStudentsId());
+        reference.child(Dictionary.teamRequest).setValue(null);
+        DatabaseReference p = FirebaseDatabase.getInstance().getReference().child(Dictionary.PROJECTS).child(Dictionary.TEAM_PROJECT);
+        p = p.child(getProjectYear(reqStudent.getProjectId()));
+        p = p.child(reqStudent.getProjectId());
+        p.child(Dictionary.joinRequests).child(reqStudent.getStudentsId()).setValue(null);
+        p.child(Dictionary.groupMembers).child(reqStudent.getStudentsId()).setValue(reqStudent.getStudentsId());
+    }
+
+    public void completeProject(String pdfUri, String zipUri) {
+        String projectId = appUser.getProjectId();
+        DatabaseReference project = FirebaseDatabase.getInstance().getReference().child(Dictionary.PROJECTS).child(appUser.getProjectType()).child(getProjectYear(projectId)).child(projectId);
+        project.child(Dictionary.projectStatus).setValue(Dictionary.COMPLETED);
+        project.child("pdfUri").setValue(pdfUri);
+        project.child("zipUri").setValue(zipUri);
+        for (DataListener listener : dataListeners) {
+            listener.projectStatus();
+        }
+    }
+
+    public void leaveProject() {
+        String projectId = appUser.getProjectId();
+        DatabaseReference project = FirebaseDatabase.getInstance().getReference().child(Dictionary.PROJECTS).child(appUser.getProjectType()).child(getProjectYear(projectId)).child(projectId);
+        if (studentProject.getProjectType() == Dictionary.TEAM_PROJECT) {
+            project.child(Dictionary.groupMembers).child(appUser.getStudentsId()).setValue(null);
+        }
+        DatabaseReference userSnapshot = FirebaseDatabase.getInstance().getReference().child(Dictionary.STUDENT_RECORDS);
+        userSnapshot.child(appUser.getStudentsId()).child(Dictionary.projectId).setValue(null);
+        userSnapshot.child(appUser.getStudentsId()).child(Dictionary.projectType).setValue(null);
+
+    }
+
+
     public interface DataListener {
-        void newRequests(ArrayList<Student> students);
+        void newRequests();
 
-        void teamPresence(ArrayList<PresenceRecord> presenceRecords);
+        void teamPresence();
 
-        void projectStatus(String projectStatus);
+        void projectStatus();
 
-        void newMessage(Chat chat);
+        void newMessage();
     }
 
-    public static ArrayList<PresenceRecord> getPresenceRecords() {
-        return presenceRecords;
-    }
 
-    public static ArrayList<Student> getJoinRequests() {
+    public ArrayList<Student> getJoinRequests() {
         if (joinRequests == null) {
             joinRequests = new ArrayList<>();
             for (IdString id : requestIds) {
                 joinRequests.add(getStudent(id.getStringContent()));
             }
             for (DataListener d : dataListeners) {
-                d.newRequests(joinRequests);
+                d.newRequests();
             }
         }
         return joinRequests;
     }
 
-    public static ArrayList<Student> getGroupMembers() {
+    private ArrayList<Student> getGroupMembers() {
         if (teamMembers == null) {
             teamMembers = new ArrayList<>();
             for (IdString id : memberIds) {
@@ -130,10 +169,10 @@ public class PavsDatabase {
             }
             studentProject.setGroupMembers(getIdStringContent(memberIds));
         }
-        return joinRequests;
+        return teamMembers;
     }
 
-    private static Student getStudent(String studentId) {
+    public Student getStudent(String studentId) {
         DataSnapshot userSnapshot = pavsDatabase.child(Dictionary.STUDENT_RECORDS);
         Student x = null;
         if (userSnapshot.hasChild(studentId)) {
@@ -143,7 +182,7 @@ public class PavsDatabase {
             String userName = userSnapshot.child(Dictionary.userName).getValue(String.class);
             String projectType = userSnapshot.child(Dictionary.projectType).getValue(String.class);
             String projectId = userSnapshot.child(Dictionary.projectId).getValue(String.class);
-            x = new Student(studentId).setAdmissionNumber(getAdmNo(admissionNumber))
+            x = new Student(studentId).setAdmissionNumber(admissionNumber)
                     .setUserName(userName)
                     .setPhoneNumber(phoneNumber)
                     .setProjectType(projectType)
@@ -153,15 +192,7 @@ public class PavsDatabase {
     }
 
 
-    private static String setAdmNo(String x) {
-        return x.replace("/", "-");
-    }
-
-    private static String getAdmNo(String x) {
-        return x.replace("-", "/");
-    }
-
-    public static Student getAppUser() {
+    public Student getAppUser() {
         String uId = FirebaseAuth.getInstance().getUid();
         if (appUser == null && pavsDatabase != null & uId != null) {
             DataSnapshot userSnapshot = pavsDatabase.child(Dictionary.STUDENT_RECORDS);
@@ -173,16 +204,21 @@ public class PavsDatabase {
                 String userName = userSnapshot.child(Dictionary.userName).getValue(String.class);
                 String projectType = userSnapshot.child(Dictionary.projectType).getValue(String.class);
                 String projectId = userSnapshot.child(Dictionary.projectId).getValue(String.class);
-                x = new Student(uId).setAdmissionNumber(getAdmNo(admissionNumber))
+                String teamRequest = userSnapshot.child(Dictionary.teamRequest).getValue(String.class);
+                x = new Student(uId).setAdmissionNumber(admissionNumber)
                         .setUserName(userName)
                         .setPhoneNumber(phoneNumber)
                         .setProjectType(projectType)
                         .setProjectId(projectId);
+                x.setTeamRequest(teamRequest);
                 appUser = x;
-                studentProject = null;
-                getStudentProject();
+                if (projectId != null && projectType != null) {
+                    studentProject = null;
+                    getStudentProject();
+                }
             }
         }
+
         if (appUser != null) {
             String projectId = appUser.getProjectId();
             boolean c = projectId != null;
@@ -205,13 +241,13 @@ public class PavsDatabase {
         return appUser;
     }
 
-    private static ArrayList<IdString> getTeamMembersId() {
+    private ArrayList<IdString> getTeamMembersId() {
         String projectId = studentProject.getProjectId();
         DataSnapshot projectSnapshot = pavsDatabase.child(Dictionary.PROJECTS).child(appUser.getProjectType()).child(getProjectYear(projectId)).child(projectId);
         return getStringList(projectSnapshot.child(Dictionary.groupMembers));
     }
 
-    private static ArrayList<IdString> getRequestIds() {
+    private ArrayList<IdString> getRequestIds() {
         String projectId = appUser.getProjectId();
         DataSnapshot projectSnapshot = pavsDatabase.child(Dictionary.PROJECTS).child(appUser.getProjectType()).child(getProjectYear(projectId)).child(projectId);
         ArrayList<IdString> joinRequest = getStringList(projectSnapshot.child(Dictionary.joinRequests));
@@ -219,16 +255,7 @@ public class PavsDatabase {
         return joinRequest;
     }
 
-    public static String getRequestId(String studentId) {
-        for (IdString idString : requestIds) {
-            if (idString.getStringContent().equals(studentId)) {
-                return idString.getStringId();
-            }
-        }
-        return "";
-    }
-
-    private static ArrayList<String> getIdStringContent(ArrayList<IdString> idStrings) {
+    private ArrayList<String> getIdStringContent(ArrayList<IdString> idStrings) {
         ArrayList<String> strings = new ArrayList<>();
         for (IdString idString : idStrings) {
             strings.add(idString.getStringContent());
@@ -236,7 +263,7 @@ public class PavsDatabase {
         return strings;
     }
 
-    public static Project getStudentProject() {
+    public Project getStudentProject() {
         if (appUser != null) {
             String projectId = appUser.getProjectId();
             if (studentProject == null && projectId != null && !projectId.equals("")) {
@@ -259,85 +286,20 @@ public class PavsDatabase {
                     x.setGroupMembers(getIdStringContent(members));
                     x.setJoinRequests(getIdStringContent(joinRequest));
                     x.setTeamSize(teamSize);
-                    if (mPubNubDataStream == null && projectStatus.equals(Dictionary.APPROVED)) {
-                        openBroadcast(x);
-                    }
+
                 }
+
                 studentProject = x;
+                for (DataListener dataListener : dataListeners) {
+                    dataListener.projectStatus();
+                }
             }
         }
         return studentProject;
     }
 
-    public static Project getProject(String projectId, String projectType) {
-        if (projectId != null && !projectId.equals("")) {
-            DataSnapshot projectSnapshot = pavsDatabase.child(Dictionary.PROJECTS).child(projectType).child(getProjectYear(projectId)).child(projectId);
-            String projectName = projectSnapshot.child(Dictionary.projectName).getValue(String.class);
-            String projectDescription = projectSnapshot.child(Dictionary.projectDescription).getValue(String.class);
-            String projectStatus = projectSnapshot.child(Dictionary.projectStatus).getValue(String.class);
-            Project x = new Project(projectId).setProjectName(projectName)
-                    .setProjectType(projectType)
-                    .setProjectDescription(projectDescription)
-                    .setProjectStatus(projectStatus);
-            if (projectType.equals(Dictionary.TEAM_PROJECT)) {
-                ArrayList<IdString> members = getStringList(projectSnapshot.child(Dictionary.groupMembers));
-                ArrayList<IdString> joinRequest = getStringList(projectSnapshot.child(Dictionary.joinRequests));
-                Integer teamSize = projectSnapshot.child(Dictionary.teamSize).getValue(Integer.class);
-                x.setGroupMembers(getIdStringContent(members));
-                x.setJoinRequests(getIdStringContent(joinRequest));
-                x.setTeamSize(teamSize);
-            }
-            return x;
-        }
-        return null;
-    }
 
-    private static void openBroadcast(Project x) {
-        presenceRecords = new ArrayList<>();
-        mPresencePnCallback = new PresencePnCallback();
-        PNConfiguration pnConfig = new PNConfiguration()
-                .setPublishKey(Dictionary.PUBNUB_PUBLISH_KEY)
-                .setSubscribeKey(Dictionary.PUBNUB_SUBSCRIBE_KEY)
-                .setUuid(appUser.getStudentsId()).setSecure(true);
-        mPubNubDataStream = new PubNub(pnConfig);
-        mPubNubDataStream.addListener(mPresencePnCallback);
-        subscribedChannels = (ArrayList<String>) Collections.singletonList(x.getProjectId());
-        mPubNubDataStream.subscribe().channels(subscribedChannels).withPresence().execute();
-        mPubNubDataStream.hereNow().channels(subscribedChannels).includeState(true).async(new PNCallback<PNHereNowResult>() {
-            @Override
-            public void onResponse(PNHereNowResult result, PNStatus status) {
-                if (status.isError()) {
-                    return;
-                }
-                for (DataListener dataListener : dataListeners) {
-                    dataListener.teamPresence(mPresencePnCallback.getRecords());
-                }
-                presenceRecords = mPresencePnCallback.getRecords();
-
-            }
-        });
-        pnConfig.setPresenceTimeoutWithCustomInterval(60, 10);
-        final Map<String, String> message = ImmutableMap.of(
-                "sender", appUser.getStudentsId(),
-                "message", Dictionary.ONLINE,
-                "timestamp", NCTimeDate.getTimeStampUtc());
-        mPubNubDataStream.publish().channel(x.getProjectId()).message(message).async(new PNCallback<PNPublishResult>() {
-            @Override
-            public void onResponse(PNPublishResult result, PNStatus status) {
-                try {
-                    if (!status.isError()) {
-                        Log.v(TAG, "publish(" + NCJson.asJson(result) + ")");
-                    } else {
-                        Log.v(TAG, "publishErr(" + NCJson.asJson(status) + ")");
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-    }
-
-    private static ArrayList<IdString> getStringList(DataSnapshot child) {
+    private ArrayList<IdString> getStringList(DataSnapshot child) {
         ArrayList<IdString> strings = new ArrayList<>();
         for (DataSnapshot snapshot : child.getChildren()) {
             String x = snapshot.getValue(String.class);
@@ -346,7 +308,7 @@ public class PavsDatabase {
         return strings;
     }
 
-    private static Chat getTeamChat() {
+    private Chat getTeamChat() {
         ArrayList<Message> messages = new ArrayList<>();
         DataSnapshot chatSnapshot = pavsDatabase.child(Dictionary.CHAT_ROOM).child(appUser.getProjectId());
         for (DataSnapshot message : chatSnapshot.getChildren()) {
@@ -369,21 +331,17 @@ public class PavsDatabase {
                     break;
             }
             messages.add(x);
-        }
-        if (teamChat.getChatMessages().size() != messages.size()) {
-            for (DataListener dataListener : dataListeners) {
-                dataListener.newMessage(new Chat(messages));
-            }
+
         }
         return new Chat(messages);
     }
 
-    private static String getProjectYear(String id) {
+    public String getProjectYear(String id) {
         String i[] = id.split("-");
         return i[1];
     }
 
-    public static String getProjectId() {
+    public String getProjectId() {
         String id;
         int year = Calendar.getInstance().get(Calendar.YEAR);
         DataSnapshot projectSnapshot = pavsDatabase.child(Dictionary.PROJECTS).child(appUser.getProjectType()).child("" + year + "RN");
@@ -402,22 +360,22 @@ public class PavsDatabase {
         return id;
     }
 
-    public static boolean selectedProjectType() {
+    public boolean selectedProjectType() {
         return appUser.getProjectType() != null && !appUser.getProjectType().equals("");
     }
 
-    public static boolean teamProject() {
+    public boolean teamProject() {
         return appUser.getProjectType().equals(Dictionary.TEAM_PROJECT);
     }
 
-    public static void saveUser(Student student) {
+    public void saveUser(Student student) {
         student.setUserName(titleCaseConversion(student.getUserName()));
-        student.setAdmissionNumber(setAdmNo(student.getAdmissionNumber()).toUpperCase());
+        student.setAdmissionNumber(student.getAdmissionNumber().toUpperCase());
         FirebaseDatabase.getInstance().getReference().child(Dictionary.STUDENT_RECORDS).child(student.getStudentsId()).setValue(student);
         appUser = student;
     }
 
-    private static String titleCaseConversion(String text) {
+    public String titleCaseConversion(String text) {
         if (text == null || text.isEmpty()) {
             return text;
         }
@@ -439,39 +397,34 @@ public class PavsDatabase {
         return converted.toString();
     }
 
-    public static boolean isLoaded() {
+    public boolean isLoaded() {
         return pavsDatabase != null;
     }
 
-    public static void saveProject(Project project) {
+    public void saveProject(Project project) {
         project.setProjectName(titleCaseConversion(project.getProjectName()));
         String projectId = project.getProjectId();
         DataSnapshot projectSnapshot = pavsDatabase.child(Dictionary.PROJECTS).child(project.getProjectType()).child(getProjectYear(projectId));
         while (projectSnapshot.hasChild(project.getProjectId())) {
             project.setProjectId(getProjectId());
         }
-        project.setProjectStatus(Dictionary.WAITING);
+        project.setProjectStatus(Dictionary.REQUESTING);
         DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child(Dictionary.PROJECTS).child(project.getProjectType());
         ref = ref.child(getProjectYear(project.getProjectId()));
         ref.child(project.getProjectId()).setValue(project);
-        ref.child(project.getProjectId()).child(Dictionary.projectStatus).setValue(Dictionary.WAITING);
+        ref.child(project.getProjectId()).child(Dictionary.projectStatus).setValue(Dictionary.REQUESTING);
+        if (project.getProjectType().equals(Dictionary.TEAM_PROJECT)) {
+            ref.child(project.getProjectId()).child(Dictionary.groupMembers).child(appUser.getStudentsId()).setValue(appUser.getStudentsId());
+        }
         appUser.setProjectId(projectId);
         saveUser(appUser);
-        if (project.getProjectType().equals(Dictionary.TEAM_PROJECT)) {
-            PNConfiguration config = new PNConfiguration();
-            config.setPublishKey(Dictionary.PUBNUB_PUBLISH_KEY);
-            config.setSubscribeKey(Dictionary.PUBNUB_SUBSCRIBE_KEY);
-            config.setUuid(project.getProjectId());
-            config.setSecure(true);
-            mPubNubDataStream = new PubNub(config);
-        }
     }
 
-    public static void joinMessaging() {
+    public void joinMessaging() {
         FirebaseMessaging.getInstance().subscribeToTopic(studentProject.getProjectId());
     }
 
-    public static void sendMessage(Message message) {
+    public void sendMessage(Message message) {
         teamChat.newMessage(message);
         DatabaseReference msgReference = FirebaseDatabase.getInstance().getReference().child(Dictionary.CHAT_ROOM);
         msgReference = msgReference.child(appUser.getProjectId()).push();
@@ -479,7 +432,7 @@ public class PavsDatabase {
         msgReference.setValue(message);
         JSONObject notification = new JSONObject();
         try {
-            notification.put("title", "Team Post: " + studentProject.getProjectName());
+            notification.put("title", "" + studentProject.getProjectName());
             notification.put("message", "New message from" + appUser.getUserName());
             notification.put("to", studentProject.getProjectId());
             sendNotification(notification);
@@ -488,39 +441,33 @@ public class PavsDatabase {
         }
     }
 
-    private static RequestQueue requestQueue() {
+    private RequestQueue requestQueue() {
         return Volley.newRequestQueue(Cache.getHome().getApplicationContext());
     }
 
-    private static void sendNotification(JSONObject notification) {
+    private void sendNotification(JSONObject notification) {
         String FCM_API = "https://fcm.googleapis.com/fcm/send";
-        ObjectRequest jsonObjectRequest = new ObjectRequest(FCM_API, notification, new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject response) {
+        ObjectRequest jsonObjectRequest = new ObjectRequest(FCM_API, notification, response -> {
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
+        }, error -> {
 
-            }
         });
         requestQueue().add(jsonObjectRequest);
     }
 
-    public static boolean joinProject(String projectId) {
+    public boolean joinProject(String projectId) {
         return pavsDatabase.child(Dictionary.PROJECTS).child(Dictionary.TEAM_PROJECT).child(getProjectYear(projectId)).hasChild(projectId);
     }
 
-    public static void createJoinRequest(String projectId) {
+    public void createJoinRequest(String projectId) {
         DatabaseReference projectSnapshot = FirebaseDatabase.getInstance().getReference().child(Dictionary.PROJECTS).child(appUser.getProjectType()).child(getProjectYear(projectId)).child(projectId);
-        projectSnapshot.child(Dictionary.joinRequests).push().setValue(appUser.getStudentsId());
+        projectSnapshot.child(Dictionary.joinRequests).child(appUser.getStudentsId()).setValue(appUser.getStudentsId());
         appUser.setProjectId(projectId);
-        appUser.setTeamRequest(Dictionary.GROUP_WAITING);
+        appUser.setTeamRequest(Dictionary.REQUESTING_TEAM);
         saveUser(appUser);
     }
 
-    public static Project getProject(String projectId) {
+    public Project getProject(String projectId) {
         DataSnapshot projectSnapshot = pavsDatabase.child(Dictionary.PROJECTS).child(appUser.getProjectType()).child(getProjectYear(projectId)).child(projectId);
         Integer teamSize = projectSnapshot.child(Dictionary.teamSize).getValue(Integer.class);
         ArrayList<IdString> members = getStringList(projectSnapshot.child(Dictionary.groupMembers));
@@ -531,16 +478,8 @@ public class PavsDatabase {
         return x;
     }
 
-    public static void closeBroadcast() {
-        if (subscribedChannels != null && mPubNubDataStream != null) {
-            mPubNubDataStream.unsubscribe().channels(subscribedChannels).execute();
-            mPubNubDataStream.removeListener(mPresencePnCallback);
-            mPubNubDataStream.stop();
-            mPubNubDataStream = null;
-        }
-    }
 
-    private static class ObjectRequest extends JsonObjectRequest {
+    private class ObjectRequest extends JsonObjectRequest {
         ObjectRequest(String url, JSONObject jsonRequest, Response.Listener<JSONObject> listener, Response.ErrorListener errorListener) {
             super(url, jsonRequest, listener, errorListener);
         }
@@ -556,3 +495,4 @@ public class PavsDatabase {
         }
     }
 }
+

@@ -1,4 +1,4 @@
-package com.nenecorp.pavsstudent.Utility.Resources;
+package com.nenecorp.pavsstudent.Utility.Tools;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
