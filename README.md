@@ -20,7 +20,7 @@ This page only contains information related to the student endpoint. To access i
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps05.jpg)  
 3. The student will then be required to select between a team or solo project depending on their current project.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps06.jpg)  
-4. On selecting the project type the student is taken to the hompage.
+4. On selecting the project type the student is taken to the hompage.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps07.jpg)  
 5. On clicking registration, team project students are requried to select between either creating or joining a team.   
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps08.jpg)  
@@ -29,7 +29,7 @@ This page only contains information related to the student endpoint. To access i
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps10.jpg)
 7. If the admin denies approval the student gets a re-attempt message.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps11.jpg)  
-8. If the project is approved the student gets an approval message.
+8. If the project is approved the student gets an approval message.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps12.jpg)  
 9. A my team option becomes available from the home screen on approval for team projects.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps13.jpg)  
