@@ -3,7 +3,7 @@ Pavs student is the student endpoint to my Project Allocation and Verification S
 
   -_Register either team or solo projects._  
   -_Acquire a project commencement approval from the admin/Lecturer._  
-  -_Chat in app with other for team members._    
+  -_Chat in app with other team members._    
   -_Submit their projects from their phones._
 
 Just to mention the main features.
