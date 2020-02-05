@@ -1,12 +1,9 @@
 # PAVS Student
-Pavs student is the student endpoint to my Project Allocation and Verification System. Since the app was developed for my school, it allows logins only from email accounts with "@kabarak.ac.ke" domain. 
-
-It provides students with the following options:  
-  -_Selecting between team and solo projects._  
-  -_Registering team's or solo projects._  
-  -_Acquring a project commencement approval from the admin._  
-  -_Provides in app group chat for team members._  
-  -_Allows students to submit their projects via mobile phones._  
+Pavs student is the student endpoint to my Project Allocation and Verification System. Since the app was developed for my school, it allows logins only from email accounts with "@kabarak.ac.ke" domain.The system was designed to harness the power of mobile computing avialable from students today to improve their school expirience by handling their class project work from their phones. This system allows students to:  
+  -_Register either team or solo projects._  
+  -_Acquire a project commencement approval from the admin/Lecturer._  
+  -_Chat in app with other for team members._  
+  Just to mention the main features.
   
 ## Getting Started
 
