@@ -49,7 +49,7 @@ This page only contains information related to the student endpoint. To access i
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps22.jpg)  
 16. An avatar icon pops up in the chat screen when a new join request is recieved.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps23.jpg)  
-17. On clicking it, the student is taken to a screen where they can approve project requests.
+17. On clicking it, the student is taken to a screen where they can approve project requests.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps24.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps25.jpg)  
 18. On aprroving a join request the my team option becomes available to the new team member.  
