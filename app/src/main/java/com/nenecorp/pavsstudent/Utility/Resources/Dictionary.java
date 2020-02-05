@@ -24,6 +24,7 @@ public class Dictionary {
     public static final String COMPLETED = "COMPLETED";
     public static final String REQUESTING = "REQUESTING";
     public static final String APPROVED = "APPROVED";
+    public static final String MARKED = "MARKED";
     public static final String TEAM_DENIED = "TEAM_DENIED";
     public static final String REQUESTING_TEAM = "REQUESTING_TEAM";
 
@@ -51,6 +52,4 @@ public class Dictionary {
     public static final String firebaseServerKey = "key=AAAAVOXIxRI:APA91bGv8VZajbd60CR4c-GzlqTrk1aLBdD7NHcyIpF7SmO0k63uDSZtkbtgHdg59HJMEwCOqusmc90_Y63nYunVxxfHXCGi8IvSrVxNHzbluzuoVC3SDgFCtYfG6YiL399ezeKfdRjL";
 
 
-    public static final String ONLINE = "join";
-    public static final String LAST_SEEN = "Offline";
 }

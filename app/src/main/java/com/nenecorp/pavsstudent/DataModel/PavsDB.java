@@ -272,6 +272,9 @@ public class PavsDB {
                 String projectType = projectSnapshot.child(Dictionary.projectType).getValue(String.class);
                 String projectDescription = projectSnapshot.child(Dictionary.projectDescription).getValue(String.class);
                 String projectStatus = projectSnapshot.child(Dictionary.projectStatus).getValue(String.class);
+                if (projectStatus.equals(Dictionary.MARKED)) {
+                    projectStatus = Dictionary.COMPLETED;
+                }
                 Project x = new Project(projectId).setProjectName(projectName)
                         .setProjectType(projectType)
                         .setProjectDescription(projectDescription)
