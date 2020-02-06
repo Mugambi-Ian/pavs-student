@@ -27,9 +27,9 @@ This page only contains information related to the student endpoint. To access i
 6. On clicking create, The student will be required to register and submit the project request for approval.
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps09.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps10.jpg)
-7. If the admin denies approval the student gets a re-attempt message.
-![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps11.jpg)
-8. If the project is approved the student gets an approval message.
+7. If the admin denies approval the student gets a re-attempt message.  
+![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps11.jpg)  
+8. If the project is approved the student gets an approval message.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps12.jpg)
 9. A my team option becomes available from the home screen on approval for team projects.
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps13.jpg)
