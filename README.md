@@ -40,16 +40,16 @@ This page only contains information related to the student endpoint. To access i
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps17.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps18.jpg)  
 12. The student will then share this code with their group members.  
-![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps19.jpg)
-13. On opening registration, other team members should click on the join team button.
+![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps19.jpg)  
+13. On opening registration, other team members should click on the join team button.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps20.jpg)  
 14. Input the team id and click join.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps21.jpg)  
 15. A message prompting you to reach out to your group members for approval will be displayed until the student's request is approved.  
-![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps22.jpg)
-16. An avatar icon pops up in the chat screen when a new join request is received.
-![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps23.jpg)
-17. On clicking it, the student is taken to a screen where they can approve project requests.
+![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps22.jpg)  
+16. An avatar icon pops up in the chat screen when a new join request is received.  
+![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps23.jpg)  
+17. On clicking it, the student is taken to a screen where they can approve project requests.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps24.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps25.jpg)
 18. On approving a join request my team option becomes available to the new team member.
@@ -62,8 +62,8 @@ This page only contains information related to the student endpoint. To access i
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps31.jpg)  
 20. On clicking my info on the home page, the student is taken to a screen where they can change personal info.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps39.jpg)
-![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps40.jpg)
-21. On clicking submit project the user is taken to a project submission screen.
+![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps40.jpg)  
+21. On clicking submit project the user is taken to a project submission screen.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps32.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps33.jpg)
 22. On clicking either option, the user is taken to a file selection screen. This screen requires permission to read and write storage. If the permissions are not granted the app prompts the student to allow read and write permissions.  
