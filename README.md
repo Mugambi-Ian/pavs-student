@@ -33,7 +33,7 @@ This page only contains information related to the student endpoint. To access i
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps12.jpg)
 9. A my team option becomes available from the home screen on approval for team projects.
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps13.jpg)
-10. On clicking my team, the student is taken to a group chat screen for the team project members.
+10. On clicking my team, the student is taken to a group chat screen for the team project members.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps14.jpg)
 11. On clicking the QR button, the group id is copied to the clipboard. The group id is needed by other students to join the team.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps16.jpg)
@@ -66,20 +66,20 @@ This page only contains information related to the student endpoint. To access i
 21. On clicking submit project the user is taken to a project submission screen.
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps32.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps33.jpg)
-22. On clicking either option, the user is taken to a file selection screen. This screen requires permission to read and write storage. If the permissions are not granted the app prompts the student to allow read and write permissions.
+22. On clicking either option, the user is taken to a file selection screen. This screen requires permission to read and write storage. If the permissions are not granted the app prompts the student to allow read and write permissions.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps34.jpg)
-![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps35.jpg)
-23. On selecting the necessary files, a submit button becomes available. On clicking it the student successfully submits their project. On clicking it the files are uploaded to storage and become available from the admin's endpoint.
+![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps35.jpg)  
+23. On selecting the necessary files, a submit button becomes available. On clicking it the student successfully submits their project. On clicking it the files are uploaded to storage and become available from the admin's endpoint.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps35_0.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps36.jpg)
+![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps37.jpg)  
+25. After submission, clicking the registration button prompts the student on successful project submission and steps to follow to start a new project.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps37.jpg)
-25. After submission, clicking the registration button prompts the student on successful project submission and steps to follow to start a new project.
-![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps37.jpg)
-![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps38.jpg)
-26. Manage project offers the student an option to switch between projects.
+![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps38.jpg)  
+26. Manage project offers the student an option to switch between projects.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps41.jpg)
-![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps42.jpg)
-27. On clicking leave project the user is required to select what kind of project they'll do next.
+![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps42.jpg)  
+27. On clicking leave project the user is required to select what kind of project they'll do next.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps43.jpg)
 
 ## Installation
