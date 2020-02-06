@@ -11,7 +11,7 @@ Just to mention the main features.
 ## Getting Started
 This page only contains information related to the student endpoint. To access information on the Admin endpoint click [here](https://github.com/Mugambi-Ian/Pavs-Admin).
 
-1. On opening the app the student is required to sign in with their school account in this case "@kabarak.ac.ke".
+1. On opening the app the student is required to sign in with their school account in this case.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps01.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps02.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps03.jpg)
