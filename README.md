@@ -1,17 +1,17 @@
 # PAVS Student
 Pavs student is the student endpoint to my Project Allocation and Verification System. Since the app was developed for my school, it allows logins only from email accounts with the "@kabarak.ac.ke" domain.The system was designed to harness the power of mobile computing available from students today to improve their school experience by handling their class project work from their phones. This system allows students to:
 
--_Register either team or solo projects._  
--_Acquire a project commencement approval from the admin/Lecturer._  
--_Chat in-app with other team members._  
--_Submit their projects from their phones._  
+* _Register either team or solo projects._  
+* _Acquire a project commencement approval from the admin/Lecturer._  
+* _Chat in-app with other team members._  
+* _Submit their projects from their phones._  
 
-Just to mention the main features.
+among other things.
 
 ## Getting Started
 This page only contains information related to the student endpoint. To access information on the Admin endpoint click [here](https://github.com/Mugambi-Ian/Pavs-Admin).
 
-1. On opening the app the student is required to sign in with their school account in this case.  
+1. On opening the app the student is required to sign in with their school account.  
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps01.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps02.jpg)
 ![image](https://github.com/Mugambi-Ian/Pavs-Student/raw/master/ScreenShot/ssps03.jpg)
